@@ -2,11 +2,23 @@
 
 /* Add styles here to customize the appearance of your app */
 
+html {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
+
 textarea {
-  width: 100%;
+  margin: 0;
+  padding: 8px;
+  width: calc(100% - 16px);
+  color: white;
+  background-color: black;
+  /* background: rgba(0, 0, 0, 0.5); */
+  outline: none;
+  border: none;
+  resize: none;
 }

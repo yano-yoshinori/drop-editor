@@ -1,16 +1,41 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const { app, BrowserWindow, screen, Menu } = require('electron')
 const path = require('path')
 
-function createWindow () {
+const windowSize = {
+  width: 400,
+  height: 400,
+}
+
+const menuTemplate = [
+  {
+    label: 'Menu',
+    submenu: [
+      {
+        label: 'Quit',
+        role: 'quit',
+        accelerator: 'Ctrl+Q',
+      },
+    ],
+  },
+]
+
+function createWindow() {
+  const { workArea } = screen.getPrimaryDisplay()
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    x: workArea.width - windowSize.width,
+    y: workArea.height - windowSize.height,
+    width: windowSize.width,
+    height: windowSize.height,
+    frame: false,
+    transparent: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+    },
   })
+  mainWindow.setAlwaysOnTop(true)
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
@@ -23,6 +48,9 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const menu = Menu.buildFromTemplate(menuTemplate)
+  Menu.setApplicationMenu(menu)
+
   createWindow()
 
   app.on('activate', function () {
