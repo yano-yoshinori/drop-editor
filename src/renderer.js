@@ -14,12 +14,12 @@ ta.focus()
 ta.value = localStorage.getItem('drop-editor')
 ta.style.setProperty('opacity', '0.4')
 
-ta.addEventListener('drop', function (e) {
+function handleDrop(e) {
   e.preventDefault()
 
   const { dataTransfer } = e
   const text = dataTransfer.getData('text/plain')
-  const value = `${ta.value}\n${currentDateTime()}\n${text}\n\n`
+  const value = `${ta.value}\n${text}\n\n`
 
   ta.value = value
   localStorage.setItem('drop-editor', value)
@@ -34,7 +34,7 @@ ta.addEventListener('drop', function (e) {
   ta.scroll({
     top: ta.scrollHeight,
   })
-})
+}
 
 function disableOpacity() {
   ta.style.setProperty('opacity', '1.0')
@@ -44,19 +44,39 @@ function enableOpacity() {
   ta.style.setProperty('opacity', '0.4')
 }
 
+function handleKeyDown(e) {
+  const { key, ctrlKey } = e
+
+  // input date
+  if (ctrlKey) {
+    let start = ta.selectionStart
+
+    const left = ta.value.substring(0, start)
+    const right = ta.value.substring(start)
+
+    if (key === 'd') {
+      const now = utils.currentDateTime()
+      ta.value = `${left}${now}\n${right}`
+      start += now.length + 1
+    } else if (key === 'h') {
+      const bar = '---'
+      ta.value = `${left}${bar}\n${right}`
+      start += bar.length + 1
+    }
+
+    ta.selectionStart = start
+    ta.selectionEnd = start
+  }
+}
+
+ta.addEventListener('drop', handleDrop)
+
 ta.addEventListener('dragenter', disableOpacity)
 ta.addEventListener('mouseenter', disableOpacity)
 
 ta.addEventListener('dragleave', enableOpacity)
 ta.addEventListener('mouseleave', enableOpacity)
 
-function currentDateTime() {
-  const now = new Date()
+ta.addEventListener('keydown', handleKeyDown)
 
-  const month = String(now.getMonth() + 1)
-  const day = String(now.getDate()).padStart(2, '0')
-  const hour = String(now.getHours()).padStart(2, '0')
-  const minute = String(now.getMinutes()).padStart(2, '0')
-
-  return `${month}/${day} ${hour}:${minute}`
-}
+// TODO when app quit, write text to storage
