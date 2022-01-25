@@ -78,5 +78,3 @@ ta.addEventListener('dragleave', enableOpacity)
 ta.addEventListener('mouseleave', enableOpacity)
 
 ta.addEventListener('keydown', handleKeyDown)
-
-// TODO when app quit, write text to storage

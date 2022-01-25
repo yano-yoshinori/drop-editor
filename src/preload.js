@@ -10,3 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 })
+
+window.addEventListener('beforeunload', () => {
+  const ta = document.getElementById('editor')
+  window.localStorage.setItem('drop-editor', ta.value)
+})
