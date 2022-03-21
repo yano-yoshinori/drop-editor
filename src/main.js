@@ -4,7 +4,7 @@ const path = require('path')
 
 const windowSize = {
   width: 400,
-  height: 400,
+  height: 300,
 }
 
 const menuTemplate = [

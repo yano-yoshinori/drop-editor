@@ -7,12 +7,17 @@
 
 const { localStorage } = window
 
+const opacity = {
+  enabled: 1.0,
+  disabled: 0.2,
+}
+
 const ta = document.querySelector('textarea')
 ta.style.height = `${window.innerHeight}px`
 ta.focus()
 
 ta.value = localStorage.getItem('drop-editor')
-ta.style.setProperty('opacity', '0.4')
+ta.style.setProperty('opacity', opacity.disabled)
 
 function handleDrop(e) {
   e.preventDefault()
@@ -37,15 +42,17 @@ function handleDrop(e) {
 }
 
 function disableOpacity() {
-  ta.style.setProperty('opacity', '1.0')
+  ta.style.setProperty('opacity', opacity.enabled)
 }
 
 function enableOpacity() {
-  ta.style.setProperty('opacity', '0.4')
+  ta.style.setProperty('opacity', opacity.disabled)
 }
 
 function handleKeyDown(e) {
   const { key, ctrlKey } = e
+
+  if (key === 'Control') return
 
   // input date
   if (ctrlKey) {
