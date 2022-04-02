@@ -2,6 +2,7 @@
 // It has the same sandbox as a Chrome extension.
 
 const fs = require('fs')
+const { clipboard } = require('electron')
 
 const backupDir = 'storage'
 
@@ -15,11 +16,31 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 
-  if (fs.existsSync(`./${backupDir}/drop-editor.txt`)) {
-    const text = fs.readFileSync(`./${backupDir}/drop-editor.txt`)
-    const ta = document.querySelector('textarea')
-    ta.value = text
-  }
+  const ta = document.querySelector('textarea')
+
+  // clipboard operation
+  ta.addEventListener('keydown', (e) => {
+    const { key, ctrlKey, metaKey } = e
+
+    if (ctrlKey || metaKey) {
+      let start = ta.selectionStart
+
+      const left = ta.value.substring(0, start)
+      const right = ta.value.substring(start)
+
+      switch (key) {
+        case 'c':
+          clipboard.writeText(ta.value.substring(ta.selectionStart, ta.selectionEnd))
+          break
+        case 'v':
+          const text = clipboard.readText()
+          ta.value = `${left}${text}${right}`
+          ta.selectionStart = start + text.length
+          ta.selectionEnd = start + text.length
+          break
+      }
+    }
+  })
 })
 
 window.addEventListener('beforeunload', () => {

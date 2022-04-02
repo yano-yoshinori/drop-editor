@@ -19,6 +19,14 @@ ta.focus()
 ta.value = localStorage.getItem('drop-editor')
 ta.style.setProperty('opacity', opacity.disabled)
 
+// 起動直後はカーソルとスクロールを一番下に移動
+const len = ta.value.length
+ta.selectionStart = len
+ta.selectionEnd = len
+ta.scroll({
+  top: ta.scrollHeight,
+})
+
 function handleDrop(e) {
   e.preventDefault()
 
