@@ -4,7 +4,7 @@
 const fs = require('fs')
 const { clipboard } = require('electron')
 
-const backupDir = 'storage'
+const backupDir = 'backup'
 
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
